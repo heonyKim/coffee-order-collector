@@ -1,0 +1,65 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
+    org.jooq.tools.LoggerListener: debug
+    com.heony.coffee_order_collector: debug
+    org.springframework.web.client: debug
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%5p]) [%thread] %cyan(%logger) - %msg%n"
+
+spring:
+  datasource:
+    url: jdbc:sqlite:db-windows/coffee.sqlite
+    driver-class-name: org.sqlite.JDBC
+
+  profiles:
+    active: local
+
+  application:
+    name: coffee-order-collector
+
+  jooq:
+    sql-dialect: sqlite
+
+  threads:
+    virtual:
+      enabled: true
+
+  servlet:
+    multipart:
+      max-file-size: 10GB
+      max-request-size: 10GB
+
+aes:
+  key: UpEmvVr4ryCCKR4f@OQOzy4EVCsf@0R@
+  iv: 4PvCU@f4s4rCEKsE
+
+
+cafe:
+  mammoth:
+    domain: https://mmthcoffee.com
+    path:
+      menu-new: /sub/menu/new_list.php
+      menu-express: /sub/menu/list.html
+      menu-mammoth-coffee: /sub/menu/list_coffee.php
+
+      details: /sub/menu/list_coffee_view.php?menuSeq=
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+    groups-order: DESC
+    operationsSorter: alpha
+    persist-authorization: true
+    disable-swagger-default-url: true
+    display-request-duration: true
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+

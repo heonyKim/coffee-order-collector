@@ -1,0 +1,112 @@
+
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.2'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id "org.jooq.jooq-codegen-gradle" version "3.19.18"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += 'src/generated'
+        }
+    }
+}
+
+group = 'com.heony'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+bootJar {
+    archivesBaseName  = 'coffee-order-collector'
+    archiveFileName = '${archivesBaseName}.jar'
+}
+
+jar {
+    enabled = false
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //commons-logging 의존성을 SLF4J로 전환
+    implementation 'org.slf4j:jcl-over-slf4j:2.0.16'
+
+    // JOOQ
+    implementation 'org.jooq:jooq:3.19.18'
+    implementation 'org.jooq:jooq-meta:3.19.18'
+    implementation 'org.jooq:jooq-codegen:3.19.18'
+
+
+    // DB CONNECTOR
+    implementation 'org.xerial:sqlite-jdbc:3.48.0.0'
+
+    // SWAGGER-UI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.3'
+    jooqCodegen 'org.xerial:sqlite-jdbc:3.48.0.0'
+
+    // Utils
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'org.jsoup:jsoup:1.18.3'     // JSOUP (WEB CRAWLER)
+    implementation 'it.unimi.dsi:fastutil:8.5.15'   // primitive type Collection, Map
+}
+
+jooq {
+    configuration {
+        jdbc {
+            driver = "org.sqlite.JDBC"
+            url = "jdbc:sqlite:" + project.rootDir + "/db-windows/coffee.sqlite"
+        }
+        generator {
+            database {
+                name = "org.jooq.meta.sqlite.SQLiteDatabase"
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                immutablePojos = true
+                fluentSetters = true
+
+                daos = true
+                springAnnotations = true
+                springDao = true
+
+                pojosAsJavaRecordClasses = true
+            }
+            target {
+                packageName = "generated.jooq.obj"
+                directory = "src/generated/jooq"
+            }
+        }
+    }
+}
+
