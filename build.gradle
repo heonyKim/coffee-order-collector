@@ -83,7 +83,7 @@ jooq {
     configuration {
         jdbc {
             driver = "org.sqlite.JDBC"
-            url = "jdbc:sqlite:" + project.rootDir + "/db-windows/coffee.sqlite"
+            url = "jdbc:sqlite:" + project.rootDir + "/db/coffee.sqlite"
         }
         generator {
             database {
