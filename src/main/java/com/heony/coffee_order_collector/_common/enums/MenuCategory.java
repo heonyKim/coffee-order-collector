@@ -13,7 +13,7 @@ public enum MenuCategory {
     MAMMOTH_FOOD("푸드", new StoreType[]{StoreType.MAMMOTH_COFFEE, StoreType.MAMMOTH_COFFEE_NEW, StoreType.MAMMOTH_EXPRESS}),
     MAMMOTH_RTD("RTD", new StoreType[]{StoreType.MAMMOTH_COFFEE, StoreType.MAMMOTH_COFFEE_NEW, StoreType.MAMMOTH_EXPRESS}),
     MAMMOTH_MD("MD", new StoreType[]{StoreType.MAMMOTH_COFFEE, StoreType.MAMMOTH_COFFEE_NEW, StoreType.MAMMOTH_EXPRESS}),
-    MOMMOTH_NEW("신메뉴", new StoreType[]{StoreType.MAMMOTH_COFFEE_NEW}),
+    MAMMOTH_NEW("신메뉴", new StoreType[]{StoreType.MAMMOTH_COFFEE_NEW}),
     ;
 
     private final String categoryName;

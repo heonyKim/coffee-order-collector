@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -40,4 +41,15 @@ public class MenuService {
         }
 
     }
+
+    public List<Menu> getMenuList(Corp.Brand corpBrand){
+        List<StoreType> storeTypes = switch (corpBrand){
+            case MAMMOTH_COFFEE -> List.of(StoreType.MAMMOTH_COFFEE, StoreType.MAMMOTH_COFFEE_NEW);
+            case MAMMOTH_EXPRESS -> List.of(StoreType.MAMMOTH_EXPRESS, StoreType.MAMMOTH_COFFEE_NEW);
+            case null, default -> null;
+        };
+        if(storeTypes == null) new ArrayList<>();
+        return menuRepository.findByStoreTypes(storeTypes);
+    }
+
 }

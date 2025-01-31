@@ -12,7 +12,7 @@ public enum MenuSize {
     private final String menuSize;
     private final StoreType[] storeTypes;
 
-    public static List<String> getMammothSizes() {
+    public static List<String> getMammothSizesString() {
         return List.of(MAMMOTH_SIZE_S.menuSize(), MAMMOTH_SIZE_M.menuSize(), MAMMOTH_SIZE_L.menuSize());
     }
 

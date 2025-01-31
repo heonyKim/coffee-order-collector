@@ -3,8 +3,7 @@ package com.heony.coffee_order_collector.infra.mammoth;
 import com.heony.coffee_order_collector._common.enums.*;
 import generated.jooq.obj.tables.pojos.Menu;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.tools.StringUtils;
-import org.jsoup.Connection;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -87,7 +86,7 @@ public class MammothService {
                         }).map(MammothService::extractWord).toList();
                         log.debug("음료 온도 : " + menuTemperatureList);
 
-                        temperatures = menuTemperatureList.stream().map(s -> MammothMenuTemperature.valueOf(s).menuTemperature().name()).collect(Collectors.joining(", "));
+                        temperatures = menuTemperatureList.stream().map(s -> MammothMenuTemperature.valueOf(s).menuTemperature().name()).collect(Collectors.joining(","));
 
                         String imgSrc = menuDetailDoc.selectFirst(".img_wrap img").attr("src");
                         imageUrl = DOMAIN + imgSrc;
@@ -102,10 +101,10 @@ public class MammothService {
                             new Menu(
                                     null,
                                     storeType.name(),
-                                    MenuCategory.MOMMOTH_NEW.name(),
+                                    MenuCategory.MAMMOTH_NEW.name(),
                                     menuName,
-                                    temperatures,
-                                    StringUtils.isBlank(temperatures) ? null : String.join(",", MenuSize.getMammothSizes()),
+                                    StringUtils.isBlank(temperatures) ? null : temperatures,
+                                    StringUtils.isBlank(temperatures) ? null : String.join(",", MenuSize.getMammothSizesString()),
                                     requestedAt,
                                     imageUrl
                             )
@@ -144,7 +143,7 @@ public class MammothService {
                             }).map(MammothService::extractWord).toList();
                             log.debug("음료 온도 : " + menuTemperatureList);
 
-                            temperatures = menuTemperatureList.stream().map(s -> MammothMenuTemperature.valueOf(s).menuTemperature().name()).collect(Collectors.joining(", "));
+                            temperatures = menuTemperatureList.stream().map(s -> MammothMenuTemperature.valueOf(s).menuTemperature().name()).collect(Collectors.joining(","));
 
                             String imgSrc = menuDetailDoc.selectFirst(".img_wrap img").attr("src");
                             imageUrl = DOMAIN + imgSrc;
@@ -161,8 +160,8 @@ public class MammothService {
                                         storeType.name(),
                                         menuCategory.name(),
                                         menuName,
-                                        temperatures,
-                                        StringUtils.isBlank(temperatures) ? null : String.join(",", MenuSize.getMammothSizes()),
+                                        StringUtils.isBlank(temperatures) ? null : temperatures,
+                                        StringUtils.isBlank(temperatures) ? null : String.join(",", MenuSize.getMammothSizesString()),
                                         requestedAt,
                                         imageUrl
                                 )
