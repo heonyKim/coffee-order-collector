@@ -8,6 +8,7 @@ build/
 
 src/generated/
 db-windows/
+db/
 
 ### STS ###
 .apt_generated
