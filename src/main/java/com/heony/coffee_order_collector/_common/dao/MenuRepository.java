@@ -1,5 +1,6 @@
 package com.heony.coffee_order_collector._common.dao;
 
+import com.heony.coffee_order_collector._common.enums.Corp;
 import com.heony.coffee_order_collector._common.enums.StoreType;
 import generated.jooq.obj.tables.daos.MenuDao;
 import generated.jooq.obj.tables.pojos.Menu;
@@ -22,9 +23,9 @@ public class MenuRepository extends MenuDao {
         this.dsl = dsl;
     }
 
-    public List<Menu> findByStoreTypes(List<StoreType> storeTypes) {
-        return dsl.selectFrom(MENU)
-                .where(MENU.STORE_TYPE.in(storeTypes))
+    public List<Menu> findByBrand(Corp.Brand brand) {
+        return dsl.selectDistinct().from(MENU)
+                .where(MENU.BRAND.eq(brand.name()))
                 .fetchInto(Menu.class);
     }
 }

@@ -1,14 +1,10 @@
-package com.heony.coffee_order_collector.member.dto;
+package com.heony.coffee_order_collector.api.member.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.heony.coffee_order_collector._common.util.MyByteUtils;
-import com.heony.coffee_order_collector._common.util.MyDateUtils;
 import generated.jooq.obj.tables.pojos.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
-
-import java.time.LocalDate;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record CreateMemberRequest(
@@ -18,6 +14,7 @@ public record CreateMemberRequest(
     @Schema(name = "CreateMemberRequestEndpoint")
     public record Endpoint(
 
+            @Schema(description = "이름")
             @NotEmpty
             String name
     ){

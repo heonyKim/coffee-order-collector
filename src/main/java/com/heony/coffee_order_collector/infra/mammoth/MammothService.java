@@ -51,7 +51,7 @@ public class MammothService {
 
         String firstHtml = switch (storeType) {
             case MAMMOTH_COFFEE -> DOMAIN + MENU_MAMMOTH_COFFEE_PATH;
-            case MAMMOTH_COFFEE_NEW -> DOMAIN + MENU_NEW_PATH;
+            case MAMMOTH_COFFEE_NEW, MAMMOTH_EXPRESS_NEW -> DOMAIN + MENU_NEW_PATH;
             case MAMMOTH_EXPRESS -> DOMAIN + MENU_EXPRESS_PATH;
             case null, default -> null;
         };
@@ -63,7 +63,8 @@ public class MammothService {
                     .userAgent("Mozilla/5.0")
                     .get();
             Elements menuElements;
-            if(storeType == StoreType.MAMMOTH_COFFEE_NEW){
+            if(storeType == StoreType.MAMMOTH_COFFEE_NEW || storeType == StoreType.MAMMOTH_EXPRESS_NEW){
+                Corp.Brand brand = storeType == StoreType.MAMMOTH_COFFEE_NEW ? Corp.Brand.MAMMOTH_COFFEE : Corp.Brand.MAMMOTH_EXPRESS;
                 menuElements = doc.select(".con02 .clear li");
                 for (Element menuElement : menuElements) {
 
@@ -100,7 +101,7 @@ public class MammothService {
                     menus.add(
                             new Menu(
                                     null,
-                                    storeType.name(),
+                                    brand.name(),
                                     MenuCategory.MAMMOTH_NEW.name(),
                                     menuName,
                                     StringUtils.isBlank(temperatures) ? null : temperatures,
@@ -112,6 +113,7 @@ public class MammothService {
                 }
 
             }else{
+                Corp.Brand brand = storeType == StoreType.MAMMOTH_COFFEE ? Corp.Brand.MAMMOTH_COFFEE : Corp.Brand.MAMMOTH_EXPRESS;
                 Elements categoryElements = doc.select(".sub_tab2 li");
                 for (Element category : categoryElements) {
                     String categoryName = category.text();
@@ -157,7 +159,7 @@ public class MammothService {
                         menus.add(
                                 new Menu(
                                         null,
-                                        storeType.name(),
+                                        brand.name(),
                                         menuCategory.name(),
                                         menuName,
                                         StringUtils.isBlank(temperatures) ? null : temperatures,

@@ -1,13 +1,16 @@
-package com.heony.coffee_order_collector.member;
+package com.heony.coffee_order_collector.api.member;
 
 import com.heony.coffee_order_collector._common.dao.MemberRepository;
 import com.heony.coffee_order_collector._common.exception.CustomException;
 import com.heony.coffee_order_collector._common.exception.ErrorCodes;
-import com.heony.coffee_order_collector.member.dto.CreateMemberRequest;
+import com.heony.coffee_order_collector.api.member.dto.CreateMemberRequest;
+import generated.jooq.obj.tables.pojos.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -22,5 +25,9 @@ public class MemberService {
             throw new CustomException(ErrorCodes.NAME_USED_ALREADY);
         }
         memberRepository.insert(serviceRequest.toPojo());
+    }
+
+    public List<Member> getMemberList(){
+        return memberRepository.findAllByNameAsc();
     }
 }

@@ -1,4 +1,4 @@
-package com.heony.coffee_order_collector.menu;
+package com.heony.coffee_order_collector.api.menu;
 
 import com.heony.coffee_order_collector._common.dao.MenuRepository;
 import com.heony.coffee_order_collector._common.enums.Corp;
@@ -28,14 +28,19 @@ public class MenuService {
         List<Menu> menus;
         switch (corp) {
             case MAMMOTH_COFFEE -> {
-                menus = mammothService.crawlingMenus(StoreType.MAMMOTH_COFFEE, requestedAt);
-                if (menus != null) menuRepository.insert(menus);
 
                 menus = mammothService.crawlingMenus(StoreType.MAMMOTH_COFFEE_NEW, requestedAt);
                 if (menus != null) menuRepository.insert(menus);
 
+                menus = mammothService.crawlingMenus(StoreType.MAMMOTH_COFFEE, requestedAt);
+                if (menus != null) menuRepository.insert(menus);
+
+                menus = mammothService.crawlingMenus(StoreType.MAMMOTH_EXPRESS_NEW, requestedAt);
+                if (menus != null) menuRepository.insert(menus);
+
                 menus = mammothService.crawlingMenus(StoreType.MAMMOTH_EXPRESS, requestedAt);
                 if (menus != null) menuRepository.insert(menus);
+
             }
             case null, default -> {}
         }
@@ -43,13 +48,7 @@ public class MenuService {
     }
 
     public List<Menu> getMenuList(Corp.Brand corpBrand){
-        List<StoreType> storeTypes = switch (corpBrand){
-            case MAMMOTH_COFFEE -> List.of(StoreType.MAMMOTH_COFFEE, StoreType.MAMMOTH_COFFEE_NEW);
-            case MAMMOTH_EXPRESS -> List.of(StoreType.MAMMOTH_EXPRESS, StoreType.MAMMOTH_COFFEE_NEW);
-            case null, default -> null;
-        };
-        if(storeTypes == null) new ArrayList<>();
-        return menuRepository.findByStoreTypes(storeTypes);
+        return menuRepository.findByBrand(corpBrand);
     }
 
 }

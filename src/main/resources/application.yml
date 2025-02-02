@@ -12,7 +12,7 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:sqlite:db-windows/coffee.sqlite
+    url: jdbc:sqlite:db/coffee.sqlite
     driver-class-name: org.sqlite.JDBC
 
   profiles:
@@ -37,6 +37,12 @@ aes:
   key: UpEmvVr4ryCCKR4f@OQOzy4EVCsf@0R@
   iv: 4PvCU@f4s4rCEKsE
 
+app:
+  update-available:
+    enabled: true
+    timeout: 2
+    timeunit: HOURS
+#    timeunit : MILLISECONDS, SECONDS, MINUTES, HOURS, DAYS
 
 cafe:
   mammoth:

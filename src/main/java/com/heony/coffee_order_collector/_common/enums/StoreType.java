@@ -5,6 +5,7 @@ public enum StoreType {
     MAMMOTH_COFFEE("매머드커피"),
     MAMMOTH_COFFEE_NEW("매머드커피 신메뉴"),
     MAMMOTH_EXPRESS("매머드 익스프레스"),
+    MAMMOTH_EXPRESS_NEW("매머드커피 신메뉴"),
     ;
 
     public String storeName() {

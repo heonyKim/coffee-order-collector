@@ -1,7 +1,7 @@
-package com.heony.coffee_order_collector.menu;
+package com.heony.coffee_order_collector.api.menu;
 
 import com.heony.coffee_order_collector._common.enums.Corp;
-import com.heony.coffee_order_collector.menu.dto.GetMenuListResponseElement;
+import com.heony.coffee_order_collector.api.menu.dto.GetMenuListResponseElement;
 import generated.jooq.obj.tables.pojos.Menu;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +18,11 @@ public class MenuController {
 
     private final MenuService menuService;
 
-    @PostMapping("/crawling/{corp}")
-    public ResponseEntity<Void> crawlingMenus(@PathVariable Corp corp) {
-        menuService.crawlingMenus(corp);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/crawling/{corp}")
+//    public ResponseEntity<Void> crawlingMenus(@PathVariable Corp corp) {
+//        menuService.crawlingMenus(corp);
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping("/{corpBrand}")
     public ResponseEntity<List<GetMenuListResponseElement>> getMenuList(
