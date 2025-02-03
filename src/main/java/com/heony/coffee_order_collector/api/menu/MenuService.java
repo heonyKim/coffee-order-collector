@@ -22,6 +22,18 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @Transactional
+    public void updatedMenuListTask(Corp corp){
+        switch (corp){
+            case MAMMOTH_COFFEE -> {
+                menuRepository.deleteAllByBrand(Corp.Brand.MAMMOTH_EXPRESS);
+                menuRepository.deleteAllByBrand(Corp.Brand.MAMMOTH_COFFEE);
+                this.crawlingMenus(Corp.MAMMOTH_COFFEE);
+            }
+            case null, default -> {}
+        }
+    }
+
+    @Transactional
     public void crawlingMenus(Corp corp) {
         long requestedAt = System.currentTimeMillis();
 

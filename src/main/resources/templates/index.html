@@ -335,7 +335,6 @@
 
       // 통신 성공 여부 확인
       if (!response.ok) {
-        // console.log(response);
         response.text().then(value => {
           fetch(`api/v1/errors/${value}`)
                   .then(response => response.json())
@@ -346,8 +345,6 @@
         })
         loadingArea.classList.add("hidden");
         return;
-        // console.log(response.body);
-        // throw new Error('API 요청 실패: ' + response);
       }
 
       // 통신 성공 후, id가 order-list-refresh-area인 div와 order-list-btn인 버튼을 순차적으로 클릭

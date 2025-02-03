@@ -175,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 });
 
                 if (!response.ok) {
-                    // console.log(response);
                     response.text().then(value => {
                         fetch(`api/v1/errors/${value}`)
                             .then(response => response.json())

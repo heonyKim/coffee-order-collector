@@ -18,11 +18,11 @@ public class MenuController {
 
     private final MenuService menuService;
 
-//    @PostMapping("/crawling/{corp}")
-//    public ResponseEntity<Void> crawlingMenus(@PathVariable Corp corp) {
-//        menuService.crawlingMenus(corp);
-//        return ResponseEntity.ok().build();
-//    }
+    @PostMapping("/update/menu/manual/{corp}")
+    public ResponseEntity<Void> updatedMenuListTask(@PathVariable Corp corp) {
+        menuService.updatedMenuListTask(corp);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/{corpBrand}")
     public ResponseEntity<List<GetMenuListResponseElement>> getMenuList(

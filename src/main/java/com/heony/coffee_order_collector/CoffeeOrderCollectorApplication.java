@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CoffeeOrderCollectorApplication {
 
     public static void main(String[] args) {
+        System.setProperty("org.jooq.no-tips", "true");
+        System.setProperty("org.jooq.no-logo", "true");
         SpringApplication.run(CoffeeOrderCollectorApplication.class, args);
     }
 

@@ -1,22 +1,27 @@
 server:
-  port: 8080
+  port: 80
 
 logging:
   level:
-    root: info
-    org.jooq.tools.LoggerListener: debug
-    com.heony.coffee_order_collector: debug
-    org.springframework.web.client: debug
+    root: error
+    org.jooq.tools.LoggerListener: info
+    com.heony.coffee_order_collector: info
+    org.springframework.web.client: info
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%5p]) [%thread] %cyan(%logger) - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%5p] [%thread] %logger - %msg%n"
+  file:
+    name: ./logs/logback.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: ./logs/logback.%d{yyyy-MM-dd}.%i.log
+      max-history: 30
+      max-file-size: 20MB
 
 spring:
   datasource:
     url: jdbc:sqlite:db/coffee.sqlite
     driver-class-name: org.sqlite.JDBC
-
-  profiles:
-    active: local
 
   application:
     name: coffee-order-collector
@@ -35,8 +40,8 @@ spring:
 
 app:
   update-available:
-    enabled: true
-    timeout: 2
+    enabled: false
+    timeout: 3
     timeunit: HOURS
 #    timeunit : MILLISECONDS, SECONDS, MINUTES, HOURS, DAYS
 

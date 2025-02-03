@@ -13,7 +13,6 @@ document.getElementById('menu-list').addEventListener('click', function() {
         .then(response => response.json())
         .then(data => {
             menus = data;
-            console.log(menus);
             renderCategories();
             // 기본으로 "커피" 카테고리 선택 (해당 데이터가 있으면)
             const defaultCategory = "커피";

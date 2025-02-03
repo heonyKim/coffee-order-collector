@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 })
                 .then(data => {
                     todayOrderData = data; // 전역 변수에 저장
-                    console.log("data : ", data);
 
                 })
                 .catch(error => {
@@ -38,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function(){
                     return response.json();
                 })
                 .then(data => {
-                    console.log("not-yet : ", data);
                     let htmlContent = '';
                     data.forEach(memberName => {
                         htmlContent += `<button class="rounded-full px-2 bg-pink-300 text-xs font-semibold">${memberName}</button>`
@@ -77,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function(){
                     groupedOrders[menu].count += 1;
                     groupedOrders[menu].members.add(order.member_name);
                 });
-                console.log("groupedOrders",groupedOrders)
 
                 // 2. 그룹 데이터를 배열로 변환 및 회원명 Set을 배열로 변경
                 let summaryArray = Object.keys(groupedOrders).map(menu => ({
@@ -104,7 +101,6 @@ document.addEventListener('DOMContentLoaded', function(){
                     return a.menu_name.localeCompare(b.menu_name);
                 });
 
-                console.log("summaryArray",summaryArray);
 
                 // 5. HTML 문자열로 변환 (Tailwind CSS 클래스를 이용하여 간격(mb-2) 등 스타일 적용)
                 let htmlContent = '';
