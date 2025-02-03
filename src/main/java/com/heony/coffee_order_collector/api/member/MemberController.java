@@ -33,4 +33,11 @@ public class MemberController {
         return ResponseEntity.ok(memberList.stream().map(GetMemberListResponseElement::from).toList());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMember(@PathVariable Integer id){
+        memberService.deleteMember(id);
+        return ResponseEntity.ok().build();
+    }
+
+
 }

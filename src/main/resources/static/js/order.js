@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function(){
             setTimeout(() => {
                 orderTotalCount.innerText = `총합 = ${todayOrderData.length}개`;
                 resolve();
-            }, 1000)
+            }, 200)
         });
     }
 
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 // 5. HTML 문자열로 변환 (Tailwind CSS 클래스를 이용하여 간격(mb-2) 등 스타일 적용)
                 let htmlContent = '';
                 summaryArray.forEach(item => {
-                    htmlContent += `<div class="col-span-6 flex"> <button class="view-order-members-btn rounded-xl bg-stone-100 px-2 cursor-pointer">▶</button> ${item.menu_name} = ${item.count}개</div>`;
+                    htmlContent += `<div class="col-span-6 text-sm flex"> <button class="view-order-members-btn rounded-xl bg-stone-100 px-1 cursor-pointer">▶</button> ${item.menu_name} = ${item.count}개</div>`;
                     //(${item.members.join(', ')})
                     htmlContent += `<div class="col-span-6 border-b-1 py-4 border-gray-200 flex flex-wrap hidden">`;
                     item.members.forEach(memberName => {
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     });
                 });
                 resolve();
-            },1000)
+            },200)
         })
     }
 
@@ -161,12 +161,14 @@ document.addEventListener('DOMContentLoaded', function(){
             setOrderTotalCount();
             orderSummary();
 
-            document.getElementById('order-list-refresh-area').addEventListener("click", async function () {
-                console.log("작동!");
+            document.getElementById('order-list-refresh-area').addEventListener("click", async function (e) {
+                loadingArea.classList.remove("hidden");
+                e.stopPropagation();
                 await fetchOrders();
                 fetchOrdersNotYet();
-                setOrderTotalCount();
-                orderSummary();
+                await setOrderTotalCount();
+                await orderSummary();
+                loadingArea.classList.add("hidden");
             })
         })
         .catch(error => console.error(error));

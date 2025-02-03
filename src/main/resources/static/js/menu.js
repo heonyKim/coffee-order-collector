@@ -38,7 +38,7 @@ function renderCategories() {
     categories.forEach(category => {
         const btn = document.createElement('button');
         btn.textContent = category;
-        btn.className = "px-4 py-2 rounded border hover:bg-gray-100";
+        btn.className = "px-4 py-2 rounded border border-gray-300";
         btn.addEventListener('click', () => loadMenuItems(category));
         container.appendChild(btn);
     });
@@ -51,7 +51,7 @@ function loadMenuItems(category) {
     const filteredMenus = menus.filter(menu => menu.category_name === category);
     filteredMenus.forEach(menu => {
         const div = document.createElement('div');
-        div.className = "cursor-pointer border rounded overflow-hidden hover:shadow-lg transition-shadow";
+        div.className = "cursor-pointer border rounded border-gray-100 overflow-hidden transition-shadow";
         div.innerHTML = `
           <img src="${menu.image_url}" alt="${menu.name}" class="w-full h-32 object-cover">
           <div class="p-2 text-center font-medium">${menu.name}</div>

@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function(){
         memberList.innerHTML = '';
         members.forEach(member => {
             const li = document.createElement('li');
-            li.className = "cursor-pointer hover:bg-gray-200 px-3 py-2";
+            li.className = "cursor-pointer px-3 py-2";
             li.setAttribute('data-id', member.id);
             li.textContent = member.name;
             memberList.appendChild(li);
@@ -118,9 +118,124 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // 이벤트: 새로고침 버튼 클릭 시 회원 데이터를 다시 불러옴
     refreshBtn.addEventListener('click', function(e){
+        loadingArea.classList.remove("hidden");
         e.stopPropagation(); // 외부 클릭 이벤트 방지
         hideMemberList();      // 새로고침 전에 리스트를 숨김 (원하는 경우)
         fetchMembers();
+        loadingArea.classList.add("hidden");
+    });
+
+    memberModificationBtn.addEventListener("click", async function () {
+        menuArea.classList.add("hidden");
+        orderListArea.classList.add("hidden");
+        memberListArea.classList.remove("hidden");
+
+        await fetchMembers();
+        let htmlContent = '';
+
+        membersData.forEach(member => {
+            htmlContent += `<div class="col-span-6 grid grid-cols-6 gap-0 border-b-1 border-gray-100">`;
+            htmlContent += `    <input type="hidden" value="${member.id}"><div class="col-span-4 align-middle my-1">${member.name}</div><div class="col-span-2 flex justify-end"><button class="delete-member-btn rounded-xl bg-pink-300 px-4 py-2 text-sm font-semibold cursor-pointer">삭제</button></div>`;
+            htmlContent += `</div>`;
+        });
+        htmlContent += `<div class="col-span-6 py-4"></div>`;
+
+        htmlContent += `<div class="col-span-6 grid grid-cols-24 gap-0 border-b-1 border-gray-200">`;
+        htmlContent += `    <div class="col-span-3 my-1">이름</div>`;
+        htmlContent += `    <div class="col-start-4 col-span-16">`;
+        htmlContent += `        <div class="flex items-center bg-white pl-3">`;
+        htmlContent += `            <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>`;
+        htmlContent += `            <input type="text" id="create-member-name" class="block min-w-0 grow py-1.5 text-base text-gray-900 text-center placeholder:text-center placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="추가할 회원 이름을 입력">`;
+        htmlContent += `        </div>`;
+        htmlContent += `    </div>`;
+        htmlContent += `    <div class="col-start-20 col-span-5 flex justify-end">`;
+        htmlContent += `        <button id="create-member-btn" class="rounded-xl bg-blue-300 px-4 py-2 text-sm font-semibold cursor-pointer">추가</button>`;
+        htmlContent += `    </div>`;
+        htmlContent += `</div>`;
+
+        document.getElementById('member-list-area').innerHTML = htmlContent;
+
+        document.getElementById('create-member-btn').addEventListener("click", async function() {
+            const memberNameInput = document.getElementById('create-member-name');
+            if(memberNameInput.value==='' || memberNameInput.value===null || memberNameInput.value===undefined){
+                return;
+            }
+            const requestBody = {
+                name : memberNameInput.value
+            }
+
+            loadingArea.classList.remove("hidden");
+            try {
+                const response = await fetch('/api/v1/members', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    // console.log(response);
+                    response.text().then(value => {
+                        fetch(`api/v1/errors/${value}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                alert(data.message);
+                            })
+                            .catch(error => {})
+                    })
+                    loadingArea.classList.add("hidden");
+                    return;
+                }
+
+                alert('회원 등록이 완료되었습니다.');
+                loadingArea.classList.add("hidden");
+                //통신 성공 후 리스트 클릭
+                window.location.reload();
+
+            }catch (error) {
+                console.error('주문 API 에러:', error);
+                loadingArea.classList.add("hidden");
+            }
+
+        })
+
+        document.querySelectorAll('.delete-member-btn').forEach(button => {
+            button.addEventListener('click', event => {
+                // 확인 창 표시
+                if (!confirm("해당 회원을 삭제하시겠습니까?")) {
+                    return;  // 사용자가 취소하면 아무 작업도 수행하지 않음
+                }
+
+                // 클릭한 버튼의 부모 div를 찾고, 그 안의 hidden input에서 member id 추출
+                const parentDiv = event.target.parentElement.parentElement;
+                const hiddenInput = parentDiv.querySelector('input[type="hidden"]');
+                const memberId = hiddenInput.value;
+
+                loadingArea.classList.remove("hidden");
+                // DELETE 요청 전송
+                fetch(`/api/v1/members/${memberId}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('삭제가 완료되었습니다.');
+                            loadingArea.classList.add("hidden");
+                            window.location.reload()
+
+                        } else {
+                            loadingArea.classList.add("hidden");
+                            alert('회원 삭제에 실패하였습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        loadingArea.classList.add("hidden");
+                        alert('서버와 통신 중 오류가 발생하였습니다.');
+                    });
+            });
+        });
+
     });
 
     // 페이지 로딩 시 회원 데이터를 API에서 가져옴

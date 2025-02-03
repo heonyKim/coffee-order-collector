@@ -11,6 +11,7 @@
 <body>
   <div class="bg-white dark:bg-gray-800 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+
       <div class="grid grid-cols-6 gap-4">
 
 
@@ -32,10 +33,10 @@
         <div class="col-span-6"></div>
 
         <div class="col-span-3 text-center flex">
-          <button id="menu-area-btn" class="rounded-md cursor-pointer bg-blue-500 hover:bg-blue-600 px-4 py-2 text-sm text-white font-semibold flex-auto">메뉴</button>
+          <button id="menu-area-btn" class="rounded-md cursor-pointer bg-blue-500 px-4 py-2 text-sm text-white font-semibold flex-auto">메뉴</button>
         </div>
         <div class="col-span-3 text-center flex">
-          <button id="order-list-btn" class="rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 hover:bg-stone-100 flex-auto">주문리스트</button>
+          <button id="order-list-btn" class="rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 flex-auto">주문리스트</button>
         </div>
 
 
@@ -49,7 +50,7 @@
             <div class="member-select-wrapper flex items-center">
 
               <!-- 새로고침 버튼 -->
-              <button id="member-refresh-btn" class="ml-2 p-2 border border-gray-300 rounded-md hover:bg-gray-100" title="리스트 새로고침">
+              <button id="member-refresh-btn" class="p-2.5" title="리스트 새로고침">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 6V4l-4 4 4 4V8c3.31 0 6 2.69 6 6a6 6 0 01-6 6 6.002 6.002 0 01-5.657-4H4.07a8.003 8.003 0 007.93 6 8 8 0 000-16z"/>
                 </svg>
@@ -92,23 +93,15 @@
 
           </div>
           <div class="col-span-1 text-center flex">
-            <button class="rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-1 border-stone-300 hover:bg-stone-100 flex-auto">
-              <svg fill="#57534d" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45.402 45.402"
-                   xml:space="preserve">
-                <g>
-                    <path d="M41.267,18.557H26.832V4.134C26.832,1.851,24.99,0,22.707,0c-2.283,0-4.124,1.851-4.124,4.135v14.432H4.141
-                        c-2.283,0-4.139,1.851-4.138,4.135c-0.001,1.141,0.46,2.187,1.207,2.934c0.748,0.749,1.78,1.222,2.92,1.222h14.453V41.27
-                        c0,1.142,0.453,2.176,1.201,2.922c0.748,0.748,1.777,1.211,2.919,1.211c2.282,0,4.129-1.851,4.129-4.133V26.857h14.435
-                        c2.283,0,4.134-1.867,4.133-4.15C45.399,20.425,43.548,18.557,41.267,18.557z"/>
-                </g>
-              </svg>
+            <button id="member-modification-btn" class="rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-1 border-stone-300 flex-auto">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 18L20 18" stroke="#57534d" stroke-width="2" stroke-linecap="round"></path> <path d="M4 12L20 12" stroke="#57534d" stroke-width="2" stroke-linecap="round"></path> <path d="M4 6L20 6" stroke="#57534d" stroke-width="2" stroke-linecap="round"></path> </g></svg>
             </button>
           </div>
 
           <div class="col-span-6"></div>
 
           <div class="col-span-4 text-center flex">
-            <button id="menu-list" class="rounded-md cursor-pointer bg-blue-800 hover:bg-blue-900 px-4 py-2 text-sm text-white font-semibold flex-auto">메뉴리스트</button>
+            <button id="menu-list" class="rounded-md cursor-pointer bg-blue-800 px-4 py-2 text-sm text-white font-semibold flex-auto">메뉴리스트</button>
           </div>
 
           <!--  -->
@@ -118,9 +111,9 @@
             <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto">
               <div class="p-4">
                 <!-- 모달 헤더: 제목 및 닫기 버튼 -->
-                <div class="flex justify-between items-center border-b pb-2">
+                <div class="flex justify-between items-center border-b border-gray-300 pb-2">
                   <h2 class="text-xl font-semibold">메뉴 선택</h2>
-                  <button onclick="closeMenuModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
+                  <button onclick="closeMenuModal()" class="p-3 border-1 rounded-xl border-gray-500 text-gray-500">&times;</button>
                 </div>
                 <!-- 카테고리 버튼 영역 -->
                 <div id="category-buttons" class="flex flex-wrap gap-2 mt-4">
@@ -141,7 +134,7 @@
                 <!-- 상세 모달 헤더 -->
                 <div class="flex justify-between items-center border-b pb-2">
                   <h2 class="text-xl font-semibold">옵션 선택</h2>
-                  <button onclick="closeDetailModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
+                  <button onclick="closeDetailModal()" class="p-3 border-1 rounded-xl border-gray-500 text-gray-500">&times;</button>
                 </div>
                 <!-- 메뉴 이미지 (확대) -->
                 <img id="detailImage" src="" alt="메뉴 이미지" class="w-full h-auto mt-4 rounded">
@@ -164,7 +157,7 @@
 
                 <!-- 선택완료 버튼 -->
                 <div class="mt-6 flex justify-end">
-                  <button id="confirmSelection" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded shadow">
+                  <button id="confirmSelection" class="px-6 py-2 bg-blue-500 text-white rounded shadow">
                     선택완료
                   </button>
                 </div>
@@ -176,7 +169,7 @@
 
 
           <div class="col-span-2 text-center flex">
-            <button id="order-pass-btn" class="rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-pink-500 border-2 border-pink-500 hover:bg-stone-100 flex-auto">PASS</button>
+            <button id="order-pass-btn" class="rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-pink-500 border-2 border-pink-500 flex-auto">PASS</button>
           </div>
 
           <div class="col-span-2 py-2"><span class="align-middle">메뉴명</span></div>
@@ -193,7 +186,7 @@
             <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
           </div>
           <div class="col-span-6 flex">
-            <button id="order-menu-btn" class="py-6 rounded-md cursor-pointer bg-blue-800 hover:bg-blue-900 px-4 py-2 text-sm text-white font-semibold flex-auto">주문하기</button>
+            <button id="order-menu-btn" class="py-6 rounded-md cursor-pointer bg-blue-800 px-4 py-2 text-sm text-white font-semibold flex-auto">주문하기</button>
           </div>
 
         </div>
@@ -228,8 +221,28 @@
 
         </div>
 
+
+        <!---------------------------------------회원 리스트--------------------------------------------->
+        <div class="col-span-6 grid grid-cols-6 gap-0 hidden" id="member-list-area">
+          <div class="col-span-6 grid grid-cols-6 gap-0 border-b-1 border-gray-200">
+            <input type="hidden" value="1">
+            <div class="col-span-4 align-middle my-1">김명근</div>
+            <div class="col-span-2 flex justify-end">
+              <button class="rounded-xl bg-pink-300 px-4 py-2 text-sm font-semibold">삭제</button>
+            </div>
+          </div>
+          <div class="col-span-6 grid grid-cols-6 gap-0 border-b-1 border-gray-200">
+            <input type="hidden" value="2"><div class="col-span-4 align-middle my-1">김성헌</div><div class="col-span-2 flex justify-end"><button class="rounded-xl bg-pink-300 px-4 py-2 text-sm font-semibold">삭제</button></div>
+          </div>
+        </div>
+
+
       </div>
     </div>
+  </div>
+  <div id="loading-area" class="fixed inset-0 flex items-center justify-center bg-black opacity-50 dark:bg-black dark:opacity-50 z-9999 hidden">
+    <!-- 회전하는 스피너: modern UI 스타일 -->
+    <div class="w-16 h-16 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
   </div>
 </body>
 
@@ -239,46 +252,63 @@
 
   const today = [[ ${today} ]];
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const menuAreaBtn = document.getElementById("menu-area-btn");
-    const orderListBtn = document.getElementById("order-list-btn");
-    const orderPassBtn = document.getElementById("order-pass-btn");
+  const menuAreaBtn = document.getElementById("menu-area-btn");
+  const orderListBtn = document.getElementById("order-list-btn");
+  const orderPassBtn = document.getElementById("order-pass-btn");
+  const orderMenuBtn = document.getElementById("order-menu-btn");
+  const memberModificationBtn = document.getElementById("member-modification-btn");
 
-    const menuArea = document.getElementById("menu-area");
-    const orderListArea = document.getElementById("order-list-area");
+  const menuArea = document.getElementById("menu-area");
+  const orderListArea = document.getElementById("order-list-area");
+  const memberListArea = document.getElementById("member-list-area");
+  const loadingArea = document.getElementById("loading-area");
+
+  document.addEventListener("DOMContentLoaded", function () {
 
 
     // 메뉴 영역 버튼 클릭 시 동작
     menuAreaBtn.addEventListener("click", function () {
       // 버튼 클래스 변경
-      menuAreaBtn.className = "rounded-md cursor-pointer px-4 py-2 bg-blue-500 hover:bg-blue-600 text-sm text-white font-semibold flex-auto";
-      orderListBtn.className = "rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 hover:bg-stone-100 flex-auto";
+      menuAreaBtn.className = "rounded-md cursor-pointer px-4 py-2 bg-blue-500 text-sm text-white font-semibold flex-auto";
+      orderListBtn.className = "rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 flex-auto";
 
       // 콘텐츠 영역 전환
       menuArea.classList.remove("hidden");
       orderListArea.classList.add("hidden");
+      memberListArea.classList.add("hidden");
+
     });
 
     // 주문 목록 버튼 클릭 시 동작
     orderListBtn.addEventListener("click", function () {
       // 버튼 클래스 변경
-      menuAreaBtn.className = "rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 hover:bg-stone-100 flex-auto";
-      orderListBtn.className = "rounded-md cursor-pointer px-4 py-2 bg-blue-500 hover:bg-blue-600 text-sm text-white font-semibold flex-auto";
+      menuAreaBtn.className = "rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 flex-auto";
+      orderListBtn.className = "rounded-md cursor-pointer px-4 py-2 bg-blue-500 text-sm text-white font-semibold flex-auto";
 
       // 콘텐츠 영역 전환
       menuArea.classList.add("hidden");
       orderListArea.classList.remove("hidden");
+      memberListArea.classList.add("hidden");
     });
+
 
     orderPassBtn.addEventListener("click", function () {
       document.getElementById('final-menu-name').value = "PASS";
     });
 
+
+
   });
 
-  const orderMenuBtn = document.getElementById("order-menu-btn");
-
   orderMenuBtn.addEventListener("click", async function () {
+    const memberSearchInput = document.getElementById("member-search-input");
+    const memberSelectedId = document.getElementById("member-selected-id");
+    if(memberSearchInput.value==='' || memberSearchInput.value===null || memberSearchInput.value===undefined ||
+            memberSelectedId.value==='' || memberSelectedId.value===null || memberSelectedId.value===undefined
+    ){
+      alert("이름이 올바르게 선택되지 않았습니다.");
+      return;
+    }
     const corpBrand = getCorpBrand();
     // member_id: id가 member-selected-id인 input hidden의 value
     const memberId = document.getElementById('member-selected-id').value;
@@ -292,6 +322,7 @@
       menu_name: menuName
     };
 
+    loadingArea.classList.remove("hidden");
     try {
       // fetch를 이용한 POST 요청 (api 통신)
       const response = await fetch('/api/v1/order-histories', {
@@ -304,17 +335,33 @@
 
       // 통신 성공 여부 확인
       if (!response.ok) {
-        throw new Error('API 요청 실패: ' + response.status);
+        // console.log(response);
+        response.text().then(value => {
+          fetch(`api/v1/errors/${value}`)
+                  .then(response => response.json())
+                  .then(data => {
+                    alert(data.message);
+                  })
+                  .catch(error => {})
+        })
+        loadingArea.classList.add("hidden");
+        return;
+        // console.log(response.body);
+        // throw new Error('API 요청 실패: ' + response);
       }
 
       // 통신 성공 후, id가 order-list-refresh-area인 div와 order-list-btn인 버튼을 순차적으로 클릭
       document.getElementById('order-list-refresh-area').click();
       document.getElementById('order-list-btn').click();
+      loadingArea.classList.add("hidden");
     } catch (error) {
       console.error('주문 API 에러:', error);
+      loadingArea.classList.add("hidden");
     }
 
   });
+
+
 
 
 
