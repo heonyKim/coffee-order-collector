@@ -27,7 +27,9 @@ public class UpdatedMenuListTask {
 
     @Scheduled(cron = "0 0 8 * * Mon", zone = "GMT+9")
     public void run(){
+        log.info("Update MenuList start..");
         menuService.updatedMenuListTask(Corp.MAMMOTH_COFFEE);
+        log.info("Update MenuList complete!");
     }
 
 }
