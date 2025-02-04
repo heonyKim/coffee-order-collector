@@ -40,8 +40,8 @@ spring:
 
 app:
   update-available:
-    enabled: false
-    timeout: 3
+    enabled: true
+    timeout: 4
     timeunit: HOURS
 #    timeunit : MILLISECONDS, SECONDS, MINUTES, HOURS, DAYS
 

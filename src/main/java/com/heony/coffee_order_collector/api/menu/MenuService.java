@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -62,5 +61,31 @@ public class MenuService {
     public List<Menu> getMenuList(Corp.Brand corpBrand){
         return menuRepository.findByBrand(corpBrand);
     }
+
+    public List<Menu> getFavoriteMenuList(Corp.Brand corpBrand){
+        return switch (corpBrand){
+            case MAMMOTH_COFFEE -> List.of();
+            case MAMMOTH_EXPRESS -> {
+                List<Menu> byBrandAndNames = menuRepository.findByBrandAndNames(
+                        Corp.Brand.MAMMOTH_EXPRESS,
+                        List.of("아메리카노", "카페 라떼", "바닐라 라떼", "초코 라떼", "토피넛 라떼", "지리산 청매실티")
+                );
+                byBrandAndNames.sort((o1, o2) -> setFirstTo("아메리카노", o1, o2));
+                yield byBrandAndNames;
+            }
+            case null, default -> List.of();
+        };
+    }
+
+    private static int setFirstTo(String menuName, Menu o1, Menu o2) {
+        if(menuName.equals(o1.name()) && !menuName.equals(o2.name())){
+            return -1;
+        }else if (!menuName.equals(o1.name()) && menuName.equals(o2.name())){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
 
 }

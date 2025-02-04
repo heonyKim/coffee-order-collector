@@ -29,6 +29,14 @@ public class MenuRepository extends MenuDao {
                 .fetchInto(Menu.class);
     }
 
+
+    public List<Menu> findByBrandAndNames(Corp.Brand brand, List<String> names){
+        return dsl.selectDistinct().from(MENU)
+                .where(MENU.BRAND.eq(brand.name()))
+                .and(MENU.NAME.in(names))
+                .fetchInto(Menu.class);
+    }
+
     public void deleteAllByBrand(Corp.Brand brand){
         dsl.deleteFrom(MENU).where(MENU.BRAND.eq(brand.name())).execute();
     }
