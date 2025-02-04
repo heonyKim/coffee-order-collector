@@ -36,7 +36,7 @@ repositories {
 
 bootJar {
     archivesBaseName  = 'coffee-order-collector'
-    archiveFileName = '${archivesBaseName}.jar'
+    archiveFileName = 'coffee-order-collector.jar'
 }
 
 jar {
