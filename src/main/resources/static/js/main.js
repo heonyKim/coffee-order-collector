@@ -48,6 +48,22 @@ const UIHandlers = (() => {
     const memberListArea = document.getElementById("member-list-area");
     const finalMenuNameInput = document.getElementById('final-menu-name');
 
+    function setRecentMemberAndMenu() {
+        const recentMemberId = localStorage.getItem(Common.getCorpBrand() + "-member-id");
+        const recentMemberName = localStorage.getItem(Common.getCorpBrand() + "-member-name");
+        const recentMenuName = localStorage.getItem(Common.getCorpBrand() + "-menu-name");
+
+        if (recentMemberId) {
+            document.getElementById('member-selected-id').value = recentMemberId;
+        }
+        if (recentMemberName) {
+            document.getElementById('member-search-input').value = recentMemberName;
+        }
+        if (recentMenuName) {
+            document.getElementById('final-menu-name').value = recentMenuName;
+        }
+    }
+
     function setActive(button) {
         if (button === "menu") {
             menuAreaBtn.className = "rounded-md cursor-pointer px-4 py-2 bg-blue-500 text-sm text-white font-semibold flex-auto";
@@ -95,6 +111,7 @@ const UIHandlers = (() => {
 
     return {
         init: function() {
+            setRecentMemberAndMenu();
             renderFavoriteMenuButton();
             menuAreaBtn.addEventListener('click', handleMenuAreaClick);
             orderListBtn.addEventListener('click', handleOrderListClick);
@@ -643,7 +660,7 @@ document.getElementById('order-menu-btn').addEventListener("click", async functi
     }
     const corpBrand = Common.getCorpBrand();
     const memberId = parseInt(memberSelectedId.value, 10);
-    const menuName = document.getElementById('final-menu-name').value;
+    const menuName = document.getElementById('final-menu-name').value.trim();
     const requestBody = {
         member_id: memberId,
         brand: corpBrand,
@@ -664,6 +681,11 @@ document.getElementById('order-menu-btn').addEventListener("click", async functi
             Loading.hide();
             return;
         }
+
+        localStorage.setItem(Common.getCorpBrand() + "-member-id", memberId);
+        localStorage.setItem(Common.getCorpBrand() + "-member-name", memberSearchInput.value.trim());
+        localStorage.setItem(Common.getCorpBrand() + "-menu-name", menuName);
+
         document.getElementById('order-list-refresh-area').click();
         document.getElementById('order-list-btn').click();
         Loading.hide();
