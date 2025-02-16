@@ -144,6 +144,7 @@ const UIHandlers = (() => {
 const OrderModule = (() => {
     let todayOrderData = [];
     const orderTotalCount = document.getElementById('order-total-count');
+    let viewAllOrderMembersBtn = document.getElementById('view-all-order-members-btn');
 
     async function fetchOrders() {
         try {
@@ -220,7 +221,8 @@ const OrderModule = (() => {
         });
         document.getElementById('order-summary').innerHTML = htmlContent;
 
-        document.querySelectorAll('.view-order-members-btn').forEach(button => {
+        let viewOrderMembersBtnClass = document.querySelectorAll('.view-order-members-btn');
+        viewOrderMembersBtnClass.forEach(button => {
             button.addEventListener('click', function(e) {
                 const currentButton = e.currentTarget;
                 const parentDiv = currentButton.parentElement;
@@ -231,13 +233,31 @@ const OrderModule = (() => {
                         targetDiv.classList.remove('hidden');
                     }
                 } else {
+                    viewAllOrderMembersBtn.textContent = "모두펼치기";
                     currentButton.textContent = '▶';
                     if (targetDiv && !targetDiv.classList.contains('hidden')) {
                         targetDiv.classList.add('hidden');
                     }
                 }
+
+                let openAll = false;
+                for (let i = 0; i < viewOrderMembersBtnClass.length; i++) {
+                    const button = viewOrderMembersBtnClass[i];
+                    if(button.textContent.trim() === '▶'){
+                        openAll = true;
+                        break;
+                    }
+                }
+                if(openAll){
+                    viewAllOrderMembersBtn.textContent = "모두펼치기";
+                }else{
+                    viewAllOrderMembersBtn.textContent = "모두접기";
+                }
+
             });
         });
+
+
     }
 
     async function refreshOrderList() {
@@ -255,16 +275,56 @@ const OrderModule = (() => {
         Loading.hide();
     }
 
+    async function setAction(){
+        document.getElementById('order-list-refresh-area').addEventListener("click", async function(e) {
+            e.stopPropagation();
+            await refreshOrderList();
+        });
+
+        viewAllOrderMembersBtn.addEventListener("click", async function(e) {
+            e.stopPropagation();
+
+            const allOrderMembers = document.querySelectorAll('.view-order-members-btn');
+            let openAll = false;
+            for (let i = 0; i < allOrderMembers.length; i++) {
+                const button = allOrderMembers[i];
+                if(button.textContent.trim() === '▶'){
+                    openAll = true;
+                    break;
+                }
+            }
+            // let openAll = allOrderMembers.some(button => button.textContent.trim() === '▶');
+            if(openAll){
+                viewAllOrderMembersBtn.textContent = "모두접기";
+                allOrderMembers.forEach(button => {
+                    button.textContent = '▼';
+                    const targetDiv = button.parentElement.nextElementSibling;
+                    if (targetDiv && targetDiv.classList.contains('hidden')) {
+                        targetDiv.classList.remove('hidden');
+                    }
+                });
+
+            } else {
+                viewAllOrderMembersBtn.textContent = "모두펼치기";
+                allOrderMembers.forEach(button => {
+                    button.textContent = '▶';
+                    const targetDiv = button.parentElement.nextElementSibling;
+                    if (targetDiv && !targetDiv.classList.contains('hidden')) {
+                        targetDiv.classList.add('hidden');
+                    }
+                });
+            }
+
+        })
+    }
+
     return {
         init: async function() {
             await fetchOrders();
             await fetchOrdersNotYet();
             await setOrderTotalCount();
             await renderOrderSummary();
-            document.getElementById('order-list-refresh-area').addEventListener("click", async function(e) {
-                e.stopPropagation();
-                await refreshOrderList();
-            });
+            await setAction();
         },
         refresh: refreshOrderList
     };
