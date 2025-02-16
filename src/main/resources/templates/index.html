@@ -33,11 +33,14 @@
 
       <!-- 네비게이션 버튼 (메뉴 / 주문리스트) -->
       <div class="col-span-6"></div>
-      <div class="col-span-3 text-center flex">
-        <button id="menu-area-btn" class="rounded-md cursor-pointer bg-blue-500 px-4 py-2 text-sm text-white font-semibold flex-auto">메뉴</button>
+      <div class="col-span-2 text-center flex">
+        <button id="menu-area-btn" class="rounded-md cursor-pointer bg-blue-500 px-2 py-2 text-sm text-white font-semibold flex-auto">메뉴</button>
       </div>
-      <div class="col-span-3 text-center flex">
+      <div class="col-span-2 text-center flex">
         <button id="order-list-btn" class="rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 flex-auto">주문리스트</button>
+      </div>
+      <div class="col-span-2 text-center flex">
+        <button id="unorderable-menu-btn" class="rounded-md cursor-pointer px-2 py-2 text-sm font-semibold text-pink-500 border-2 border-pink-500 flex-auto">주문불가 메뉴</button>
       </div>
 
       <!-- [메뉴 영역] -->
@@ -171,6 +174,36 @@
 
       <!-- [회원 리스트 영역] -->
       <div id="member-list-area" class="col-span-6 grid grid-cols-6 gap-0 hidden"></div>
+
+      <!-- [주문불가 메뉴 영역] -->
+      <div id="unorderable-menu-area" class="col-span-6 grid grid-cols-6 gap-4 hidden">
+        <!-- 주문불가 메뉴 리스트 -->
+        <div id="unorderable-menu-list" class="col-span-6"></div>
+        <!-- 신규 주문불가 메뉴 추가 폼 -->
+
+        <div class="col-span-6 py-4"></div>
+        <div class="col-span-6 flex items-center gap-4">
+          <p class="text-sm">
+            해당 명칭이 포함된 메뉴는 모두 주문불가 처리 됩니다.
+          </p>
+        </div>
+
+        <!---->
+        <div class="col-span-6 grid grid-cols-24 gap-0 border-b border-gray-200">
+          <div class="col-span-4 my-1">메뉴명</div>
+          <div class="col-start-5 col-span-15">
+            <div class="flex items-center bg-white pl-3">
+              <input type="text" id="new-unorderable-menu-name" class="block min-w-0 grow py-1.5 text-base text-gray-900 text-center placeholder:text-center placeholder:text-gray-400 focus:outline-none" placeholder="추가할 주문불가 메뉴명 입력">
+            </div>
+          </div>
+          <div class="col-start-20 col-span-5 flex justify-end">
+            <button id="add-unorderable-menu-btn" class="rounded-xl bg-blue-300 px-4 py-2 text-sm font-semibold cursor-pointer">추가</button>
+          </div>
+        </div>
+        <!---->
+
+      </div>
+
     </div>
     <footer class="bg-white py-4">
       <div class="max-w-7xl mx-auto px-4 text-center">

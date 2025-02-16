@@ -2,6 +2,7 @@ package com.heony.coffee_order_collector.api.order;
 
 import com.heony.coffee_order_collector._common.GlobalVariables;
 import com.heony.coffee_order_collector._common.dao.MemberRepository;
+import com.heony.coffee_order_collector._common.dao.MenuBlackRepository;
 import com.heony.coffee_order_collector._common.dao.OrderHistoryRepository;
 import com.heony.coffee_order_collector._common.enums.Corp;
 import com.heony.coffee_order_collector._common.enums.StoreType;
@@ -33,6 +34,7 @@ public class OrderHistoryService {
 
     private final OrderHistoryRepository orderHistoryRepository;
     private final MemberRepository memberRepository;
+    private final MenuBlackRepository menuBlackRepository;
 
     @Transactional
     public void createOrderHistory(CreateOrderHistoryRequest requestDto, HttpServletRequest request) {
@@ -80,6 +82,12 @@ public class OrderHistoryService {
                 throw new CustomException(ErrorCodes.UPDATE_AVALIABLE_DISABLE);
             }
         }
+
+        //주문이 불가능한 메뉴인지 체크
+        boolean isBlackList = menuBlackRepository.findByBrand(requestDto.brand()).stream()
+                .anyMatch(menuBlack -> requestDto.menuName().contains(menuBlack.name()));
+        if(isBlackList) throw new CustomException(ErrorCodes.MENU_BLACK_LIST);
+
 
         if(beCreated){ //생성
             orderHistoryRepository.insert(orderHistory);

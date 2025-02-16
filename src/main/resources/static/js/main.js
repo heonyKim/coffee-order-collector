@@ -43,10 +43,12 @@ const Loading = (() => {
 const UIHandlers = (() => {
     const menuAreaBtn = document.getElementById("menu-area-btn");
     const orderListBtn = document.getElementById("order-list-btn");
+    const unorderableMenuBtn = document.getElementById("unorderable-menu-btn");
     const menuArea = document.getElementById("menu-area");
     const orderListArea = document.getElementById("order-list-area");
     const memberListArea = document.getElementById("member-list-area");
     const finalMenuNameInput = document.getElementById('final-menu-name');
+    const unorderableMenuArea = document.getElementById("unorderable-menu-area");
 
     function setRecentMemberAndMenu() {
         const recentMemberId = localStorage.getItem(Common.getCorpBrand() + "-member-id");
@@ -65,18 +67,29 @@ const UIHandlers = (() => {
     }
 
     function setActive(button) {
+
+        // 기본 스타일 초기화
+        menuAreaBtn.className = "rounded-md cursor-pointer px-2 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 flex-auto";
+        orderListBtn.className = "rounded-md cursor-pointer px-2 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 flex-auto";
+        unorderableMenuBtn.className = "rounded-md cursor-pointer px-2 py-2 text-sm font-semibold text-pink-500 border-2 border-pink-500 flex-auto";
+
+        // 모든 영역 숨김
+        menuArea.classList.add("hidden");
+        orderListArea.classList.add("hidden");
+        memberListArea.classList.add("hidden");
+        unorderableMenuArea.classList.add("hidden");
+
         if (button === "menu") {
-            menuAreaBtn.className = "rounded-md cursor-pointer px-4 py-2 bg-blue-500 text-sm text-white font-semibold flex-auto";
-            orderListBtn.className = "rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 flex-auto";
+            menuAreaBtn.className = "rounded-md cursor-pointer px-2 py-2 bg-blue-500 text-sm text-white font-semibold flex-auto";
             menuArea.classList.remove("hidden");
-            orderListArea.classList.add("hidden");
-            memberListArea.classList.add("hidden");
         } else if (button === "order") {
-            menuAreaBtn.className = "rounded-md cursor-pointer px-4 py-2 text-sm font-semibold text-blue-500 border-2 border-blue-500 flex-auto";
-            orderListBtn.className = "rounded-md cursor-pointer px-4 py-2 bg-blue-500 text-sm text-white font-semibold flex-auto";
-            menuArea.classList.add("hidden");
+            orderListBtn.className = "rounded-md cursor-pointer px-2 py-2 bg-blue-500 text-sm text-white font-semibold flex-auto";
             orderListArea.classList.remove("hidden");
-            memberListArea.classList.add("hidden");
+        } else if (button === "unorderable") {
+            unorderableMenuBtn.className = "rounded-md cursor-pointer px-2 py-2 bg-pink-500 text-sm text-white font-semibold flex-auto";
+            unorderableMenuArea.classList.remove("hidden");
+            // 주문불가 메뉴 리스트 로드
+            UnorderableMenuModule.loadUnorderableMenus();
         }
     }
 
@@ -86,6 +99,10 @@ const UIHandlers = (() => {
 
     function handleOrderListClick() {
         setActive("order");
+    }
+
+    function handleUnorderableMenuClick() {
+        setActive("unorderable");
     }
 
     function handleOrderPassClick() {
@@ -115,6 +132,7 @@ const UIHandlers = (() => {
             renderFavoriteMenuButton();
             menuAreaBtn.addEventListener('click', handleMenuAreaClick);
             orderListBtn.addEventListener('click', handleOrderListClick);
+            unorderableMenuBtn.addEventListener('click', handleUnorderableMenuClick);
             document.getElementById('order-pass-btn').addEventListener('click', handleOrderPassClick);
         }
     };
@@ -641,6 +659,100 @@ const MemberModule = (() => {
     };
 })();
 
+
+// -----------------------
+// blacklist-menu Module
+// -----------------------
+const UnorderableMenuModule = (() => {
+    let unorderableMenus = [];
+
+    async function fetchUnorderableMenus() {
+        try {
+            const response = await fetch(`/api/v1/menus/blacklist/${Common.getCorpBrand()}`);
+            if (!response.ok) throw new Error('Failed to fetch unorderable menus');
+            unorderableMenus = await response.json();
+        } catch(error) {
+            console.error('Error fetching unorderable menus:', error);
+        }
+    }
+
+    function renderUnorderableMenuList() {
+        const container = document.getElementById('unorderable-menu-list');
+        container.innerHTML = '';
+        if (unorderableMenus.length === 0) {
+            return;
+        }
+        unorderableMenus.forEach(menu => {
+            const div = document.createElement('div');
+            div.className = "col-span-6 grid grid-cols-6 gap-0 border-b border-gray-100";
+            div.innerHTML = `
+                <div class="col-span-4 align-middle my-1">${menu.name}</div>
+                <div class="col-span-2 flex justify-end">
+                    <button data-id="${menu.name}" class="delete-unorderable-menu-btn rounded-xl bg-pink-300 px-4 py-2 text-sm font-semibold cursor-pointer">삭제</button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        document.querySelectorAll('.delete-unorderable-menu-btn').forEach(button => {
+            button.addEventListener('click', async () => {
+                const blackName = button.getAttribute('data-id');
+                if (!confirm("해당 메뉴를 주문불가 목록에서 삭제하시겠습니까?")) return;
+                try {
+                    const response = await fetch(`/api/v1/menus/blacklist/${Common.getCorpBrand()}/${blackName}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        await loadUnorderableMenus();
+                    } else {
+                        alert('삭제에 실패했습니다.');
+                    }
+                } catch (error) {
+                    console.error('Error deleting unorderable menu:', error);
+                }
+            });
+        });
+    }
+
+    async function addUnorderableMenu() {
+        const input = document.getElementById('new-unorderable-menu-name');
+        const name = input.value.trim();
+        if (!name) return;
+        Loading.show();
+        try {
+            const response = await fetch(`/api/v1/menus/blacklist/${Common.getCorpBrand()}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+            if (response.ok) {
+                input.value = '';
+                await loadUnorderableMenus();
+                Loading.hide();
+            } else {
+                const errorText = await response.text();
+                const errorResponse = await fetch(`api/v1/errors/${errorText}`);
+                const errorData = await errorResponse.json();
+                alert(errorData.message);
+                Loading.hide();
+            }
+        } catch (error) {
+            console.error('Error adding unorderable menu:', error);
+        }
+    }
+
+    async function loadUnorderableMenus() {
+        await fetchUnorderableMenus();
+        renderUnorderableMenuList();
+    }
+
+    function init() {
+        document.getElementById('add-unorderable-menu-btn').addEventListener('click', addUnorderableMenu);
+    }
+
+    return { init, loadUnorderableMenus };
+})();
+
+
+
 // -----------------------
 // 주문하기 버튼 (전역 이벤트)
 // -----------------------
@@ -696,6 +808,15 @@ document.getElementById('order-menu-btn').addEventListener("click", async functi
 });
 
 
+//주문불가 메뉴명 입력후 엔터 시 버튼클릭으로 적용
+document.getElementById('new-unorderable-menu-name').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // 기본 동작(예: 폼 제출) 방지
+        document.getElementById('add-unorderable-menu-btn').click();
+    }
+});
+
+
 // -----------------------
 // 초기화: DOMContentLoaded 후 모듈 초기화
 // -----------------------
@@ -704,4 +825,5 @@ document.addEventListener("DOMContentLoaded", async function() {
     MenuModule.init();
     await MemberModule.init();
     await OrderModule.init();
+    UnorderableMenuModule.init();
 });

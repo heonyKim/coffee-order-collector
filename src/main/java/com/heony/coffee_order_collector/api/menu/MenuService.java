@@ -1,14 +1,25 @@
 package com.heony.coffee_order_collector.api.menu;
 
+import com.heony.coffee_order_collector._common.dao.MenuBlackRepository;
 import com.heony.coffee_order_collector._common.dao.MenuRepository;
 import com.heony.coffee_order_collector._common.enums.Corp;
 import com.heony.coffee_order_collector._common.enums.StoreType;
+import com.heony.coffee_order_collector._common.exception.CustomException;
+import com.heony.coffee_order_collector._common.exception.ErrorCodes;
+import com.heony.coffee_order_collector._common.util.MyNetworkUtils;
+import com.heony.coffee_order_collector.api.member.dto.CreateMemberRequest;
+import com.heony.coffee_order_collector.api.menu.dto.CreateMenuBlackRequest;
 import com.heony.coffee_order_collector.infra.mammoth.MammothService;
 import generated.jooq.obj.tables.pojos.Menu;
+import generated.jooq.obj.tables.pojos.MenuBlack;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -19,6 +30,7 @@ public class MenuService {
 
     private final MammothService mammothService;
     private final MenuRepository menuRepository;
+    private final MenuBlackRepository menuBlackRepository;
 
     @Transactional
     public void updatedMenuListTask(Corp corp){
@@ -59,7 +71,14 @@ public class MenuService {
     }
 
     public List<Menu> getMenuList(Corp.Brand corpBrand){
-        return menuRepository.findByBrand(corpBrand);
+        List<Menu> allMenuList = menuRepository.findByBrand(corpBrand);
+        List<MenuBlack> menuBlackList = menuBlackRepository.findByBrand(corpBrand);
+
+        for (MenuBlack menuBlack : menuBlackList) {
+            allMenuList.removeIf(menu -> menu.name().contains(menuBlack.name()));
+        }
+
+        return allMenuList;
     }
 
     public List<Menu> getFavoriteMenuList(Corp.Brand corpBrand){
@@ -76,6 +95,24 @@ public class MenuService {
             case null, default -> List.of();
         };
     }
+
+    public List<MenuBlack> getMenuBlackList(Corp.Brand corpBrand){
+        return menuBlackRepository.findByBrand(corpBrand);
+    }
+
+    @Transactional
+    public void deleteMenuBlack(Corp.Brand corpBrand, String blackName){
+        menuBlackRepository.deleteByBrandAndName(corpBrand, blackName);
+    }
+
+    @Transactional
+    public void createMenuBlack(Corp.Brand corpBrand, CreateMenuBlackRequest.Service serviceRequest, HttpServletRequest request) {
+        if(menuBlackRepository.existsByBrandAndName(corpBrand, serviceRequest.name())) {
+            throw new CustomException(ErrorCodes.MENU_BLACK_USED_ALREADY);
+        }
+        menuBlackRepository.insert(serviceRequest.toPojo(corpBrand, MyNetworkUtils.getClientIp(request)));
+    }
+
 
     private static int setFirstTo(String menuName, Menu o1, Menu o2) {
         if(menuName.equals(o1.name()) && !menuName.equals(o2.name())){
